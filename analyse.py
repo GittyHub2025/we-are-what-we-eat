@@ -25,7 +25,7 @@ from collections import Counter
 
 # ── CONFIGURATION ──────────────────────────────────────────────────────────────
 SUPABASE_URL = "https://unhxcxaklhvefqveywmv.supabase.co"
-SUPABASE_KEY = "sb_publishable_KU1Umj62XGDgTzQhR6MZAw_OuyB-WwT"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVuaHhjeGFrbGh2ZWZxdmV5d212Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NjcxOTMsImV4cCI6MjA4NzA0MzE5M30.7N1HE-5jj9XuArcowsI-PZWTFqNO5JArE8rb0okswfY"
 
 # ── IMPORTS ────────────────────────────────────────────────────────────────────
 try:
