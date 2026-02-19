@@ -1152,32 +1152,22 @@
 
   <footer>
     <p>🌱 <strong>We Are What We Eat</strong> · Isaac's P3–P6 Research Project · Singapore 2026</p>
-    <p style="margin-top:6px;">Data stored securely on GitHub · <a href="https://github.com" target="_blank">View Project</a> · PDPA Compliant</p>
+    <p style="margin-top:6px;">Data stored securely on Supabase (PostgreSQL) · <a href="https://github.com/GittyHub2025/we-are-what-we-eat" target="_blank">View Project on GitHub</a> · PDPA Compliant</p>
   </footer>
 
 </div><!-- /shell -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   /* =====================================================
-     GITHUB CONFIGURATION
-     =====================================================
-     To activate data storage:
-     1. Create a GitHub Personal Access Token (PAT) at:
-        https://github.com/settings/tokens
-        → Select scope: "repo" (for private repos)
-        → Or "public_repo" (for public repos)
-     2. Create a PRIVATE GitHub repository for data storage
-        (separate from your main survey repo)
-     3. Replace the values below with your details.
+     SUPABASE CONFIGURATION
+     Publishable anon key — safe to embed in client-side
+     code by design (Row Level Security enforces INSERT-only
+     from anonymous users; only the owner can read/delete).
      ===================================================== */
-  // Token is split to prevent accidental exposure in logs; reassembled at runtime only.
-  const _t = ['gh','p_WTPL','wPCFP','H3d0h','Wk8XE','wIl7p','xQCFl','c1sVj','D6'];
-  const CONFIG = {
-    GITHUB_TOKEN: _t.join(''),
-    GITHUB_OWNER: 'GittyHub2025',
-    GITHUB_REPO:  'we-are-what-we-eat-data',
-    ENABLED: true
-  };
+  const SUPABASE_URL = 'https://unhxcxaklhvefqveywmv.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_KU1Umj62XGDgTzQhR6MZAw_OuyB-WwT';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   /* ── PROGRESS BAR ── */
   const TOTAL_SECTIONS = 6;
@@ -1267,87 +1257,13 @@
   }
 
   /* ── FORMAT ISSUE BODY ── */
-  function formatIssueBody(data) {
-    const lines = [
-      `## 📋 Survey Response`,
-      `**Submitted:** ${data.timestamp}`,
-      `**Response ID:** ${data.responseId || 'N/A'}`,
-      '',
-      `### 👤 Section 1 — About the Respondent`,
-      `| Question | Answer |`,
-      `|---|---|`,
-      `| Who is filling in? | ${data.q1_who || '—'} |`,
-      `| Primary level | ${data.q2_level || '—'} |`,
-      `| Child identifies as | ${data.q3_gender || '—'} |`,
-      '',
-      `### 🦸 Section 2 — Flavour DNA`,
-      `| Question | Answer |`,
-      `|---|---|`,
-      `| Favourite texture | ${data.q4_texture || '—'} |`,
-      `| Favourite flavour | ${data.q5_flavour || '—'} |`,
-      `| Favourite snack | ${data.q6_snack || '—'} |`,
-      `| Spicy food attitude | ${data.q7_spicy || '—'} |`,
-      `| Favourite fruit | ${data.q8_fruit || '—'} |`,
-      `| Tried new food last month | ${data.q9_new || '—'} |`,
-      `| Reaction to unfamiliar food | ${data.q10_new_food || '—'} |`,
-      '',
-      `### 🍽️ Section 3 — Food Life`,
-      `| Question | Answer |`,
-      `|---|---|`,
-      `| Vegetables yesterday | ${data.q11_veg || '—'} |`,
-      `| Sugary drinks yesterday | ${data.q12_drinks || '—'} |`,
-      `| Fried food last week | ${data.q13_fried || '—'} |`,
-      `| Family dinners last week | ${data.q14_family || '—'} |`,
-      `| Who decides snacks | ${data.q15_snack_decide || '—'} |`,
-      `| Breakfast days last week | ${data.q16_breakfast || '—'} |`,
-      `| School food type | ${data.q17_school || '—'} |`,
-      '',
-      `### 🌍 Section 4 — Food Explorer`,
-      `| Question | Answer |`,
-      `|---|---|`,
-      `| Cuisines tried | ${(data.q18_cuisine || []).join(', ') || '—'} |`,
-      `| Adventurous foods tried | ${(data.q19_adv || []).join(', ') || '—'} |`,
-      `| Open to healthy substitutes | ${data.q20_substitute || '—'} |`,
-      `| Food introduced by | ${data.q21_intro || '—'} |`,
-      `| Family food conversations | ${data.q22_convo || '—'} |`,
-      '',
-      `### 🏆 Section 5 — Health Awareness`,
-      `| Question | Answer |`,
-      `|---|---|`,
-      `| Post-meal feeling | ${data.q23_feel || '—'} |`,
-      `| What healthy eating means | ${(data.q24_healthy || []).join(', ') || '—'} |`,
-      `| One thing to improve | ${data.q25_improve || '—'} |`,
-      '',
-      `### 📧 Email`,
-      data.email ? `**Email:** ${data.email}` : '_No email provided_',
-    ];
-    return lines.join('\n');
-  }
-
-  /* ── SUBMIT TO GITHUB ISSUES ── */
-  async function submitToGitHub(data) {
-    if (!CONFIG.ENABLED) {
-      console.log('GitHub storage not configured. Response data:', data);
-      return { ok: true, simulated: true };
-    }
-    const label = data.q2_level || 'unknown-level';
-    const response = await fetch(
-      `https://api.github.com/repos/${CONFIG.GITHUB_OWNER}/${CONFIG.GITHUB_REPO}/issues`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `token ${CONFIG.GITHUB_TOKEN}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/vnd.github.v3+json'
-        },
-        body: JSON.stringify({
-          title: `Survey Response · ${data.timestamp.split('T')[0]} · ${label} · ${data.responseId}`,
-          body: formatIssueBody(data),
-          labels: ['survey-response', label]
-        })
-      }
-    );
-    return response;
+  /* ── SUBMIT TO SUPABASE ── */
+  async function submitToSupabase(payload) {
+    const { data, error } = await db
+      .from('survey_responses')
+      .insert([payload]);
+    if (error) throw new Error(error.message);
+    return data;
   }
 
   /* ── FORM SUBMIT ── */
@@ -1364,28 +1280,56 @@
 
     const overlay = document.getElementById('loadingOverlay');
     overlay.classList.add('active');
-
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
 
-    const data = collectFormData();
-    data.responseId = 'FOOD-' + Date.now().toString(36).toUpperCase();
+    const raw = collectFormData();
+
+    // Map collected form data to Supabase column names
+    const payload = {
+      q1_who:            raw.q1_who            || null,
+      q2_level:          raw.q2_level          || null,
+      q3_gender:         raw.q3_gender         || null,
+      q4_texture:        raw.q4_texture        || null,
+      q5_flavour:        raw.q5_flavour        || null,
+      q6_snack:          raw.q6_snack          || null,
+      q7_spicy:          raw.q7_spicy          || null,
+      q8_fruit:          raw.q8_fruit          || null,
+      q9_new:            raw.q9_new            || null,
+      q10_new_food:      raw.q10_new_food      || null,
+      q11_veg:           raw.q11_veg           || null,
+      q12_drinks:        raw.q12_drinks        || null,
+      q13_fried:         raw.q13_fried         || null,
+      q14_family:        raw.q14_family        || null,
+      q15_snack_decide:  raw.q15_snack_decide  || null,
+      q16_breakfast:     raw.q16_breakfast     || null,
+      q17_school:        raw.q17_school        || null,
+      q18_cuisine:       raw.q18_cuisine       || [],
+      q19_adv:           raw.q19_adv           || [],
+      q20_substitute:    raw.q20_substitute    || null,
+      q21_intro:         raw.q21_intro         || null,
+      q22_convo:         raw.q22_convo         || null,
+      q23_feel:          raw.q23_feel          || null,
+      q24_healthy:       raw.q24_healthy       || [],
+      q25_improve:       raw.q25_improve       || null,
+      email:             raw.email             || null,
+    };
 
     try {
-      const result = await submitToGitHub(data);
+      await submitToSupabase(payload);
       updateProgress(6);
 
-      // Show thank you
       document.getElementById('surveyForm').style.display = 'none';
-      document.getElementById('responseId').textContent = data.responseId;
+      document.getElementById('responseId').textContent = 'FOOD-' + Date.now().toString(36).toUpperCase();
       const tyScreen = document.getElementById('thank-you');
       tyScreen.style.display = 'block';
       tyScreen.scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
       console.error('Submission error:', err);
-      // Fallback: show data to user
-      alert(`⚠️ Could not save to GitHub (network issue). Your Response ID is ${data.responseId}. Please screenshot this or contact Isaac's team directly.\n\nError: ${err.message}`);
+      errorBanner.textContent = '⚠️ Sorry, something went wrong saving your response. Please check your internet connection and try again. If the problem persists, please contact us directly.';
+      errorBanner.classList.add('show');
+      errorBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } finally {
       overlay.classList.remove('active');
       submitBtn.disabled = false;
