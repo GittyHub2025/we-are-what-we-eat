@@ -5,11 +5,13 @@ Pulls every response from Supabase, scores the 6 Flavour Dimensions,
 and renders a branded 2-page A4 PDF for each respondent.
 
 Usage:
-  pip install reportlab matplotlib supabase --break-system-packages
-  python generate_report.py                  # all respondents
-  python generate_report.py --limit 5        # first 5 only (preview)
-  python generate_report.py --id <uuid>      # single respondent
-  python generate_report.py --output reports # custom output folder
+  pip3 install reportlab matplotlib supabase
+  python3 generate_report.py                   # generate all PDFs
+  python3 generate_report.py --limit 5         # first 5 only (preview)
+  python3 generate_report.py --id <uuid>       # single respondent
+  python3 generate_report.py --output reports  # custom output folder
+  python3 generate_report.py --send-emails     # generate + email PDFs
+  python3 generate_report.py --send-emails --limit 1  # test with 1 email
 
 Output: reports/<id>.pdf  (one file per respondent)
 """
@@ -18,6 +20,11 @@ import os
 import sys
 import argparse
 import io
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 import textwrap
 from datetime import datetime
 
@@ -29,6 +36,12 @@ SUPABASE_KEY = (
     "icm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NjcxOTMsImV4cCI6MjA4NzA0MzE5M30"
     ".7N1HE-5jj9XuArcowsI-PZWTFqNO5JArE8rb0okswfY"
 )
+
+# ── EMAIL CONFIGURATION ────────────────────────────────────────────────────────
+EMAIL_ADDRESS  = "isaacfoodlab@gmail.com"
+EMAIL_PASSWORD = "hpar qrxb prvr jnri"   # Gmail App Password
+SMTP_HOST      = "smtp.gmail.com"
+SMTP_PORT      = 587
 
 # ── BRAND PALETTE ──────────────────────────────────────────────────────────────
 C = {
@@ -592,6 +605,148 @@ def _draw_footer(c, page_w, page_label):
     c.drawRightString(page_w - 18, 10, page_label)
 
 
+# ── EMAIL SENDING ───────────────────────────────────────────────────────────────
+
+def build_email_body(row, profile):
+    """Build a friendly plain-text + HTML email from Isaac."""
+    import re
+    avatar_raw   = profile["avatar_name"]
+    avatar_clean = re.sub(r'[^\x00-\x7F]+', '', avatar_raw).strip()
+    level        = row.get("q2_level", "Primary School")
+    dominant     = profile["dominant"]
+    neo          = profile["neo_score"]
+    neo_label    = "cautious with new foods" if neo <= 2 else ("open to trying new things" if neo <= 5 else "a real food adventurer")
+
+    subject = f"Your Food Avatar Report from Isaac's Research Project 🍱"
+
+    plain = f"""
+Hi there!
+
+Thank you SO much for completing my survey "We Are What We Eat"!
+
+My name is Isaac and I am studying food science for my school project in Singapore.
+My project looks at how kids can eat healthier by swapping foods with similar textures
+and flavours — I call this "substitution via similarity"!
+
+Your personalised Food Avatar Report is attached to this email.
+Open it to discover:
+
+  ★ Your Food Avatar: {avatar_clean}
+  ★ Your Flavour DNA profile (6 dimensions scored just for you!)
+  ★ 3 healthy food swaps matched to YOUR taste preferences
+  ★ A fun food science fact
+
+You scored as {neo_label} on the Food Adventurousness scale.
+The attached PDF has all your personalised results!
+
+Thank you so much for helping with my research.
+Every single survey helps me understand how children eat — and how we can do it better 🌱
+
+From,
+Isaac (Age 9)
+We Are What We Eat Research Project
+Singapore, 2026
+
+---
+Questions? Email: isaacfoodlab@gmail.com
+This report was generated just for you based on your survey answers.
+Your data is stored securely and used only for Isaac's research project.
+"""
+
+    html = f"""
+<html>
+<body style="font-family: Arial, sans-serif; background: #FFF8F0; margin: 0; padding: 0;">
+  <div style="max-width: 580px; margin: 30px auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+
+    <!-- Header -->
+    <div style="background: linear-gradient(135deg, #FF6B35, #FFD93D, #52B788, #00BBF9, #9B5DE5, #FF85A1); padding: 32px 28px; text-align: center;">
+      <h1 style="color: white; margin: 0; font-size: 22px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">We Are What We Eat 🌱</h1>
+      <p style="color: rgba(255,255,255,0.9); margin: 6px 0 0; font-size: 13px;">Isaac's Food Science Project · Singapore 2026</p>
+    </div>
+
+    <!-- Body -->
+    <div style="padding: 28px 32px;">
+      <p style="font-size: 15px; color: #2C2C2C;">Hi there! 👋</p>
+
+      <p style="font-size: 14px; color: #444; line-height: 1.7;">
+        Thank you <strong>so much</strong> for completing my survey <em>"We Are What We Eat"</em>!
+        My name is Isaac and I'm doing a food science research project at school in Singapore.
+      </p>
+
+      <p style="font-size: 14px; color: #444; line-height: 1.7;">
+        My project studies how kids can eat healthier by swapping foods with similar textures
+        and flavours. I call this <strong>"substitution via similarity"</strong> — and your
+        survey answers helped me understand this better!
+      </p>
+
+      <!-- Avatar highlight box -->
+      <div style="background: #FFF8F0; border-left: 5px solid #FF6B35; border-radius: 8px; padding: 16px 20px; margin: 24px 0;">
+        <p style="margin: 0; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Your Food Avatar</p>
+        <p style="margin: 6px 0 0; font-size: 20px; font-weight: bold; color: #2C2C2C;">{avatar_clean}</p>
+        <p style="margin: 4px 0 0; font-size: 13px; color: #666;">You are {neo_label} · See your full Flavour DNA in the attached PDF!</p>
+      </div>
+
+      <p style="font-size: 14px; color: #444; line-height: 1.7;">
+        <strong>Your personalised Food Avatar Report is attached</strong> 📎<br>
+        Open it to see your Flavour DNA chart, 3 healthy food swaps made just for you, and a fun food science fact!
+      </p>
+
+      <p style="font-size: 14px; color: #444; line-height: 1.7;">
+        Thank you for helping with my research. Every survey makes my project better! 🌟
+      </p>
+
+      <p style="font-size: 14px; color: #2C2C2C; margin-top: 28px;">
+        From,<br>
+        <strong>Isaac</strong> (Age 9)<br>
+        <span style="color: #888; font-size: 12px;">We Are What We Eat Research Project · Singapore 2026</span>
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div style="background: #2C2C2C; padding: 14px 28px; text-align: center;">
+      <p style="color: #888; font-size: 11px; margin: 0;">
+        Questions? Reply to this email or contact isaacfoodlab@gmail.com<br>
+        Your data is stored securely and used only for Isaac's school research project (PDPA compliant).
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>
+"""
+    return subject, plain.strip(), html.strip()
+
+
+def send_email(to_address, pdf_path, row, profile):
+    """Send the PDF report by email. Returns True on success."""
+    subject, plain_body, html_body = build_email_body(row, profile)
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"]    = f"Isaac's Food Lab <{EMAIL_ADDRESS}>"
+    msg["To"]      = to_address
+
+    msg.attach(MIMEText(plain_body, "plain"))
+    msg.attach(MIMEText(html_body,  "html"))
+
+    # Attach PDF
+    with open(pdf_path, "rb") as f:
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(f.read())
+    encoders.encode_base64(part)
+    pdf_filename = os.path.basename(pdf_path)
+    part.add_header("Content-Disposition", f'attachment; filename="{pdf_filename}"')
+    msg.attach(part)
+
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.ehlo()
+        server.starttls()
+        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_ADDRESS, to_address, msg.as_string())
+
+    return True
+
+
 # ── MAIN ────────────────────────────────────────────────────────────────────────
 
 def generate_pdf(row, out_dir):
@@ -624,19 +779,20 @@ def generate_pdf(row, out_dir):
 
 def main():
     parser = argparse.ArgumentParser(description="Generate personalised Food Avatar PDF reports")
-    parser.add_argument("--limit",  type=int,  default=None, help="Max number of reports to generate")
-    parser.add_argument("--id",     type=str,  default=None, help="Generate report for a single respondent UUID")
-    parser.add_argument("--output", type=str,  default="reports", help="Output folder (default: reports/)")
+    parser.add_argument("--limit",       type=int,  default=None,  help="Max number of reports to generate")
+    parser.add_argument("--id",          type=str,  default=None,  help="Generate report for a single respondent UUID")
+    parser.add_argument("--output",      type=str,  default="reports", help="Output folder (default: reports/)")
+    parser.add_argument("--send-emails", action="store_true",      help="Email the PDF to respondents who left an email address")
     args = parser.parse_args()
 
     try:
         from supabase import create_client
     except ImportError:
-        print("Run: pip install supabase --break-system-packages")
+        print("Run: pip3 install supabase")
         sys.exit(1)
 
     os.makedirs(args.output, exist_ok=True)
-    print(f"🔌 Connecting to Supabase…")
+    print("🔌 Connecting to Supabase…")
     client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
     if args.id:
@@ -655,19 +811,39 @@ def main():
     total = len(rows)
     print(f"📋 Generating {total} report(s) → {args.output}/\n")
 
+    emailed_ok  = 0
+    emailed_err = 0
+
     for i, row in enumerate(rows, 1):
         try:
-            path = generate_pdf(row, args.output)
+            path    = generate_pdf(row, args.output)
             profile = score_flavour_profile(row)
-            avatar = profile["avatar_name"]
-            avatar_clean = avatar.encode("ascii", "ignore").decode()
-            level = row.get("q2_level", "?")
-            print(f"  [{i:>3}/{total}] {level}  {avatar_clean:<20}  → {os.path.basename(path)}")
+            avatar_clean = profile["avatar_name"].encode("ascii", "ignore").decode()
+            level   = row.get("q2_level", "?")
+            email   = (row.get("email") or "").strip()
+
+            email_status = ""
+            if args.send_emails and email:
+                try:
+                    send_email(email, path, row, profile)
+                    email_status = f"  ✉️  sent → {email}"
+                    emailed_ok += 1
+                except Exception as mail_err:
+                    email_status = f"  ⚠️  email FAILED ({mail_err})"
+                    emailed_err += 1
+            elif args.send_emails and not email:
+                email_status = "  (no email)"
+
+            print(f"  [{i:>3}/{total}] {level}  {avatar_clean:<20}  → {os.path.basename(path)}{email_status}")
+
         except Exception as e:
             print(f"  [{i:>3}/{total}] ERROR for {row.get('id','?')}: {e}")
 
     print(f"\n✅ Done! {total} PDF(s) saved to ./{args.output}/")
-    print(f"   Open any PDF to see the personalised Food Avatar Report.")
+    if args.send_emails:
+        print(f"   📧 Emails sent: {emailed_ok}  |  Failed: {emailed_err}")
+    else:
+        print(f"   Tip: add --send-emails to automatically email each PDF to respondents")
 
 
 if __name__ == "__main__":
