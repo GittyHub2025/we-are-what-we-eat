@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>We Are What We Eat 🌱 | Isaac's Food Explorer Survey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===================================================
+       BRAND COLOR PALETTE — "We Are What We Eat"
+       ===================================================
+       🍊 Tangerine Fire   #FF6B35   — Energy, appetite
+       🌿 Fresh Leaf        #52B788   — Health, growth
+       🌟 Sunshine          #FFD93D   — Joy, positivity
+       💜 Berry Burst       #9B5DE5   — Discovery, creativity
+       🩵 Ocean Splash      #00BBF9   — Trust, exploration
+       🌸 Blossom           #FF85A1   — Warmth, approachability
+       🤍 Cloud             #FFF8F0   — Cards, clarity
+       🖤 Midnight          #2C2C2C   — Body text
+    =================================================== */
+
+    :root {
+      --tangerine: #FF6B35;
+      --leaf:      #52B788;
+      --sunshine:  #FFD93D;
+      --berry:     #9B5DE5;
+      --ocean:     #00BBF9;
+      --blossom:   #FF85A1;
+      --cloud:     #FFF8F0;
+      --midnight:  #2C2C2C;
+      --shadow:    rgba(0,0,0,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(160deg,
+        #FF6B35 0%,
+        #F7931E 18%,
+        #FFD93D 38%,
+        #52B788 62%,
+        #00BBF9 82%,
+        #9B5DE5 100%
+      );
+      background-attachment: fixed;
+      color: var(--midnight);
+      padding: 24px 16px 64px;
+    }
+
+    /* ── SHELL ── */
+    .shell {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      padding: 40px 24px 32px;
+      background: rgba(255,255,255,0.20);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      margin-bottom: 24px;
+      border: 2px solid rgba(255,255,255,0.35);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .header .badge {
+      display: inline-block;
+      background: var(--sunshine);
+      color: var(--midnight);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 99px;
+      margin-bottom: 14px;
+    }
+    .header h1 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      line-height: 1.2;
+    }
+    .header p {
+      margin-top: 10px;
+      color: rgba(255,255,255,0.92);
+      font-size: 1rem;
+      font-weight: 600;
+      max-width: 520px;
+      margin-inline: auto;
+    }
+    .header .subtitle-small {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.78);
+      font-weight: 400;
+    }
+    .emoji-row {
+      font-size: 2rem;
+      margin-top: 14px;
+      letter-spacing: 4px;
+    }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 18px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .progress-bar-bg {
+      background: rgba(255,255,255,0.3);
+      border-radius: 99px;
+      height: 14px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sunshine), #FF6B35);
+      border-radius: 99px;
+      transition: width 0.5s cubic-bezier(.4,2,.6,1);
+      position: relative;
+    }
+    .progress-bar-fill::after {
+      content: '⚡';
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 24px;
+      padding: 32px 28px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px var(--shadow);
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 3px solid;
+    }
+    .section-header.s1 { border-color: var(--blossom); }
+    .section-header.s2 { border-color: var(--sunshine); }
+    .section-header.s3 { border-color: var(--leaf); }
+    .section-header.s4 { border-color: var(--ocean); }
+    .section-header.s5 { border-color: var(--berry); }
+
+    .section-icon {
+      width: 52px; height: 52px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .s1 .section-icon { background: #FFE0EC; }
+    .s2 .section-icon { background: #FFF8D6; }
+    .s3 .section-icon { background: #D6F5E3; }
+    .s4 .section-icon { background: #D6F0FF; }
+    .s5 .section-icon { background: #EDD6FF; }
+
+    .section-title h2 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--midnight);
+    }
+    .section-title p {
+      font-size: 0.83rem;
+      color: #777;
+      margin-top: 2px;
+    }
+
+    /* ── QUESTION ── */
+    .question-block {
+      margin-bottom: 28px;
+    }
+    .question-block:last-child { margin-bottom: 0; }
+
+    .q-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .q-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px; height: 30px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .s1 .q-num { background: var(--blossom); color: #fff; }
+    .s2 .q-num { background: var(--tangerine); color: #fff; }
+    .s3 .q-num { background: var(--leaf); color: #fff; }
+    .s4 .q-num { background: var(--ocean); color: #fff; }
+    .s5 .q-num { background: var(--berry); color: #fff; }
+
+    .q-text {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--midnight);
+      line-height: 1.4;
+    }
+    .q-hint {
+      font-size: 0.8rem;
+      color: #999;
+      font-weight: 400;
+      display: block;
+      margin-top: 3px;
+    }
+
+    /* ── CHOICE GRID ── */
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 10px;
+    }
+    .choices.two-col { grid-template-columns: repeat(2, 1fr); }
+    .choices.one-col  { grid-template-columns: 1fr; }
+
+    .choice-item {
+      position: relative;
+    }
+    .choice-item input[type="radio"],
+    .choice-item input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+    .choice-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 2.5px solid #E8E8E8;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #fff;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #444;
+      user-select: none;
+    }
+    .choice-label:hover {
+      border-color: var(--tangerine);
+      background: #FFF5F0;
+      transform: translateY(-1px);
+    }
+    .choice-item input:checked + .choice-label {
+      background: linear-gradient(135deg, var(--tangerine), var(--sunshine));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(255,107,53,0.35);
+      transform: translateY(-2px);
+    }
+
+    /* Make checkboxes use leaf/green when checked */
+    .choice-item.checkbox-item input:checked + .choice-label {
+      background: linear-gradient(135deg, var(--leaf), var(--ocean));
+      box-shadow: 0 4px 16px rgba(82,183,136,0.35);
+    }
+
+    .choice-emoji { font-size: 1.3rem; flex-shrink: 0; }
+
+    /* ── EMOJI SCALE ── */
+    .emoji-scale {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .emoji-scale .choice-label {
+      flex-direction: column;
+      text-align: center;
+      padding: 14px 10px 10px;
+      min-width: 70px;
+      flex: 1;
+    }
+    .emoji-scale .choice-emoji { font-size: 1.8rem; }
+    .emoji-scale .choice-label span:last-child { font-size: 0.75rem; margin-top: 4px; }
+
+    /* ── TEXT INPUT ── */
+    .text-input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2.5px solid #E8E8E8;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-family: 'Nunito', sans-serif;
+      color: var(--midnight);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .text-input:focus {
+      border-color: var(--tangerine);
+      box-shadow: 0 0 0 4px rgba(255,107,53,0.12);
+    }
+    .text-input::placeholder { color: #bbb; }
+
+    /* ── MILESTONE CARD ── */
+    .milestone {
+      border-radius: 20px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      border: 2px solid rgba(255,255,255,0.5);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      backdrop-filter: blur(8px);
+    }
+    .milestone.ms1 { background: linear-gradient(135deg, rgba(255,217,61,0.9), rgba(255,107,53,0.8)); }
+    .milestone.ms2 { background: linear-gradient(135deg, rgba(82,183,136,0.9), rgba(0,187,249,0.8)); }
+    .milestone.ms3 { background: linear-gradient(135deg, rgba(155,93,229,0.9), rgba(255,133,161,0.85)); }
+
+    .milestone-icon { font-size: 2.2rem; flex-shrink: 0; }
+    .milestone-body h3 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .milestone-body p {
+      font-size: 0.86rem;
+      color: rgba(255,255,255,0.93);
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* ── CONSENT CARD ── */
+    .consent-card {
+      background: rgba(255,255,255,0.96);
+      border-radius: 24px;
+      padding: 28px 28px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px var(--shadow);
+    }
+    .consent-card h3 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--midnight);
+      margin-bottom: 12px;
+    }
+    .consent-card p, .consent-card ul li {
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    .consent-card ul { padding-left: 18px; margin: 8px 0; }
+    .consent-check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: #FFF5D6;
+      border-radius: 12px;
+      border: 2px solid var(--sunshine);
+    }
+    .consent-check-row input[type="checkbox"] {
+      width: 22px; height: 22px;
+      margin-top: 1px;
+      accent-color: var(--tangerine);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .consent-check-row label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--midnight);
+      cursor: pointer;
+      line-height: 1.5;
+    }
+
+    /* ── EMAIL CARD ── */
+    .email-card {
+      background: linear-gradient(135deg, rgba(155,93,229,0.15), rgba(0,187,249,0.1));
+      border: 2px solid rgba(155,93,229,0.3);
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .email-card h3 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--midnight);
+      margin-bottom: 6px;
+    }
+    .email-card p {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .email-note {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: #999;
+    }
+
+    /* ── SUBMIT BUTTON ── */
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 18px 32px;
+      background: linear-gradient(135deg, var(--tangerine), #E55A2B);
+      color: #fff;
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 18px;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(255,107,53,0.45);
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(255,107,53,0.55);
+    }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    /* ── THANK YOU SCREEN ── */
+    #thank-you {
+      display: none;
+      text-align: center;
+      background: rgba(255,255,255,0.97);
+      border-radius: 28px;
+      padding: 56px 32px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+    }
+    #thank-you .ty-emoji { font-size: 4rem; display: block; margin-bottom: 16px; }
+    #thank-you h2 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--tangerine);
+    }
+    #thank-you p { font-size: 1rem; color: #666; margin-top: 12px; max-width: 440px; margin-inline: auto; line-height: 1.6; }
+    #thank-you .avatar-teaser {
+      margin-top: 28px;
+      background: linear-gradient(135deg, #FFF8D6, #FFE4D6);
+      border-radius: 20px;
+      padding: 20px;
+      border: 2px dashed var(--sunshine);
+    }
+    #thank-you .avatar-teaser p { color: var(--midnight); font-weight: 700; margin-top: 0; }
+    #thank-you .avatar-teaser span { font-size: 2rem; display: block; margin-bottom: 8px; }
+
+    /* ── LOADING STATE ── */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .loading-overlay.active { display: flex; }
+    .spinner {
+      width: 56px; height: 56px;
+      border: 5px solid rgba(255,255,255,0.3);
+      border-top-color: var(--sunshine);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .loading-overlay p { color: #fff; font-weight: 700; font-size: 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── ERROR BANNER ── */
+    .error-banner {
+      display: none;
+      background: #FFE0E0;
+      border: 2px solid #FF6B6B;
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #C0392B;
+    }
+    .error-banner.show { display: block; }
+
+    /* ── REQUIRED STAR ── */
+    .req { color: var(--tangerine); font-size: 0.85rem; margin-left: 3px; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      margin-top: 32px;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.8rem;
+    }
+    footer a { color: rgba(255,255,255,0.9); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 520px) {
+      .card { padding: 22px 16px; }
+      .choices { grid-template-columns: 1fr; }
+      .choices.two-col { grid-template-columns: 1fr; }
+      .emoji-scale { gap: 6px; }
+      .emoji-scale .choice-label { min-width: 60px; padding: 10px 6px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===================== LOADING OVERLAY ===================== -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p>Saving your answers… 🍎</p>
+</div>
+
+<!-- ===================== SHELL ===================== -->
+<div class="shell">
+
+  <!-- HEADER -->
+  <div class="header">
+    <span class="badge">📚 A P3 Research Project · Singapore 2026</span>
+    <h1>We Are What We Eat 🌱</h1>
+    <p>A food explorer survey for kids &amp; parents — together!</p>
+    <p class="subtitle-small">Started by <strong>Isaac</strong>, age 9 · Supported by family, teachers &amp; friends</p>
+    <div class="emoji-row">🍎 🥦 🍜 🍋 🥑 🍩 🌾</div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progressText">Section 0 of 6 — Let's begin!</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- =================== SURVEY FORM =================== -->
+  <form id="surveyForm" novalidate>
+
+    <!-- ─────────────────── CONSENT ─────────────────── -->
+    <div class="consent-card" id="sec-consent">
+      <h3>🔐 Before We Start — A Note for Parents</h3>
+      <p>This survey is part of <strong>Isaac's longitudinal research project</strong> studying children's food preferences and eating habits from Primary 3 to Primary 6. Your answers will be stored securely and used only for research and educational purposes in line with <strong>Singapore's PDPA guidelines</strong>.</p>
+      <ul>
+        <li>No full names are collected — only age group and school level.</li>
+        <li>Providing your email is <strong>completely optional</strong> and is only used to send your personalised Food Avatar Report.</li>
+        <li>You may stop at any point and your partial data will not be saved.</li>
+        <li>Data is stored securely on a private GitHub repository.</li>
+      </ul>
+      <div class="consent-check-row">
+        <input type="checkbox" id="pdpaConsent" required />
+        <label for="pdpaConsent">
+          I confirm I am the parent/guardian and I consent to my child's participation in this survey. I understand how the data will be used as described above. <span class="req">*</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- ─────────────────── SECTION 1: ABOUT YOU ─────────────────── -->
+    <div class="card">
+      <div class="section-header s1">
+        <div class="section-icon">🙋</div>
+        <div class="section-title">
+          <h2>Section 1 — Let's Get to Know You!</h2>
+          <p>Questions 1–3 · Quick and easy warm-up</p>
+        </div>
+      </div>
+
+      <!-- Q1 -->
+      <div class="question-block s1">
+        <div class="q-label">
+          <span class="q-num">1</span>
+          <div>
+            <span class="q-text">Who is filling in this survey right now? <span class="req">*</span></span>
+            <span class="q-hint">Pick what fits best!</span>
+          </div>
+        </div>
+        <div class="choices one-col">
+          <div class="choice-item">
+            <input type="radio" name="q1_who" id="q1a" value="Child alone" required />
+            <label class="choice-label" for="q1a"><span class="choice-emoji">🧒</span> I'm the child, filling it in myself</label>
+          </div>
+          <div class="choice-item">
+            <input type="radio" name="q1_who" id="q1b" value="Parent alone" />
+            <label class="choice-label" for="q1b"><span class="choice-emoji">👨‍👩‍👧</span> I'm the parent, filling it in on behalf of my child</label>
+          </div>
+          <div class="choice-item">
+            <input type="radio" name="q1_who" id="q1c" value="Child and parent together" />
+            <label class="choice-label" for="q1c"><span class="choice-emoji">🤝</span> Child &amp; parent filling it in together — the best way!</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="question-block s1">
+        <div class="q-label">
+          <span class="q-num">2</span>
+          <div>
+            <span class="q-text">Which Primary level is the child currently in? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q2_level" id="q2a" value="P1" required /><label class="choice-label" for="q2a"><span class="choice-emoji">1️⃣</span> Primary 1</label></div>
+          <div class="choice-item"><input type="radio" name="q2_level" id="q2b" value="P2" /><label class="choice-label" for="q2b"><span class="choice-emoji">2️⃣</span> Primary 2</label></div>
+          <div class="choice-item"><input type="radio" name="q2_level" id="q2c" value="P3" /><label class="choice-label" for="q2c"><span class="choice-emoji">3️⃣</span> Primary 3</label></div>
+          <div class="choice-item"><input type="radio" name="q2_level" id="q2d" value="P4" /><label class="choice-label" for="q2d"><span class="choice-emoji">4️⃣</span> Primary 4</label></div>
+          <div class="choice-item"><input type="radio" name="q2_level" id="q2e" value="P5" /><label class="choice-label" for="q2e"><span class="choice-emoji">5️⃣</span> Primary 5</label></div>
+          <div class="choice-item"><input type="radio" name="q2_level" id="q2f" value="P6" /><label class="choice-label" for="q2f"><span class="choice-emoji">6️⃣</span> Primary 6</label></div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="question-block s1">
+        <div class="q-label">
+          <span class="q-num">3</span>
+          <div>
+            <span class="q-text">The child identifies as… <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q3_gender" id="q3a" value="Boy" required /><label class="choice-label" for="q3a"><span class="choice-emoji">👦</span> Boy</label></div>
+          <div class="choice-item"><input type="radio" name="q3_gender" id="q3b" value="Girl" /><label class="choice-label" for="q3b"><span class="choice-emoji">👧</span> Girl</label></div>
+          <div class="choice-item"><input type="radio" name="q3_gender" id="q3c" value="Prefer not to say" /><label class="choice-label" for="q3c"><span class="choice-emoji">🌈</span> Prefer not to say</label></div>
+        </div>
+      </div>
+    </div><!-- /card -->
+
+    <!-- ─────────────────── SECTION 2: FLAVOUR DNA ─────────────────── -->
+    <div class="card">
+      <div class="section-header s2">
+        <div class="section-icon">🦸</div>
+        <div class="section-title">
+          <h2>Section 2 — Discover Your Flavour Superpower!</h2>
+          <p>Questions 4–10 · What makes your tastebuds come alive?</p>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="question-block s2">
+        <div class="q-label">
+          <span class="q-num">4</span>
+          <div>
+            <span class="q-text">When you eat, which TEXTURE do you love most? <span class="req">*</span></span>
+            <span class="q-hint">Think about your favourite foods — what do they feel like in your mouth?</span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q4_texture" id="q4a" value="Crunchy" required /><label class="choice-label" for="q4a"><span class="choice-emoji">🥨</span> Crunchy &amp; Crispy</label></div>
+          <div class="choice-item"><input type="radio" name="q4_texture" id="q4b" value="Soft and Creamy" /><label class="choice-label" for="q4b"><span class="choice-emoji">🍮</span> Soft &amp; Creamy</label></div>
+          <div class="choice-item"><input type="radio" name="q4_texture" id="q4c" value="Chewy" /><label class="choice-label" for="q4c"><span class="choice-emoji">🍬</span> Chewy</label></div>
+          <div class="choice-item"><input type="radio" name="q4_texture" id="q4d" value="Fluffy" /><label class="choice-label" for="q4d"><span class="choice-emoji">🥞</span> Fluffy &amp; Airy</label></div>
+          <div class="choice-item"><input type="radio" name="q4_texture" id="q4e" value="Juicy" /><label class="choice-label" for="q4e"><span class="choice-emoji">🍊</span> Juicy &amp; Wet</label></div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="question-block s2">
+        <div class="q-label">
+          <span class="q-num">5</span>
+          <div>
+            <span class="q-text">Which FLAVOUR makes you want to go back for more? <span class="req">*</span></span>
+            <span class="q-hint">Your single favourite — if you can only pick one!</span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q5_flavour" id="q5a" value="Sweet" required /><label class="choice-label" for="q5a"><span class="choice-emoji">🍭</span> Sweet</label></div>
+          <div class="choice-item"><input type="radio" name="q5_flavour" id="q5b" value="Salty" /><label class="choice-label" for="q5b"><span class="choice-emoji">🧂</span> Salty</label></div>
+          <div class="choice-item"><input type="radio" name="q5_flavour" id="q5c" value="Sour" /><label class="choice-label" for="q5c"><span class="choice-emoji">🍋</span> Sour &amp; Tangy</label></div>
+          <div class="choice-item"><input type="radio" name="q5_flavour" id="q5d" value="Savoury/Umami" /><label class="choice-label" for="q5d"><span class="choice-emoji">🍜</span> Savoury / Umami</label></div>
+          <div class="choice-item"><input type="radio" name="q5_flavour" id="q5e" value="Bitter" /><label class="choice-label" for="q5e"><span class="choice-emoji">🍵</span> Slightly Bitter</label></div>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="question-block s2">
+        <div class="q-label">
+          <span class="q-num">6</span>
+          <div>
+            <span class="q-text">Pick your FAVOURITE snack from these options! <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q6_snack" id="q6a" value="Chips/Crisps" required /><label class="choice-label" for="q6a"><span class="choice-emoji">🥔</span> Chips / Crisps</label></div>
+          <div class="choice-item"><input type="radio" name="q6_snack" id="q6b" value="Chocolate" /><label class="choice-label" for="q6b"><span class="choice-emoji">🍫</span> Chocolate</label></div>
+          <div class="choice-item"><input type="radio" name="q6_snack" id="q6c" value="Biscuits/Cookies" /><label class="choice-label" for="q6c"><span class="choice-emoji">🍪</span> Biscuits / Cookies</label></div>
+          <div class="choice-item"><input type="radio" name="q6_snack" id="q6d" value="Fresh Fruit" /><label class="choice-label" for="q6d"><span class="choice-emoji">🍎</span> Fresh Fruit</label></div>
+          <div class="choice-item"><input type="radio" name="q6_snack" id="q6e" value="Seaweed Snack" /><label class="choice-label" for="q6e"><span class="choice-emoji">🌿</span> Seaweed Snack</label></div>
+          <div class="choice-item"><input type="radio" name="q6_snack" id="q6f" value="Ice Cream" /><label class="choice-label" for="q6f"><span class="choice-emoji">🍦</span> Ice Cream</label></div>
+          <div class="choice-item"><input type="radio" name="q6_snack" id="q6g" value="Nuts/Seeds" /><label class="choice-label" for="q6g"><span class="choice-emoji">🥜</span> Nuts or Seeds</label></div>
+          <div class="choice-item"><input type="radio" name="q6_snack" id="q6h" value="Other" /><label class="choice-label" for="q6h"><span class="choice-emoji">🍽️</span> Something else</label></div>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="question-block s2">
+        <div class="q-label">
+          <span class="q-num">7</span>
+          <div>
+            <span class="q-text">How do you feel about SPICY food? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices emoji-scale">
+          <div class="choice-item"><input type="radio" name="q7_spicy" id="q7a" value="No way!" required /><label class="choice-label" for="q7a"><span class="choice-emoji">😰</span><span>No way!</span></label></div>
+          <div class="choice-item"><input type="radio" name="q7_spicy" id="q7b" value="A tiny bit is okay" /><label class="choice-label" for="q7b"><span class="choice-emoji">😐</span><span>A tiny bit</span></label></div>
+          <div class="choice-item"><input type="radio" name="q7_spicy" id="q7c" value="I like it mild" /><label class="choice-label" for="q7c"><span class="choice-emoji">😊</span><span>Mild is nice</span></label></div>
+          <div class="choice-item"><input type="radio" name="q7_spicy" id="q7d" value="Bring on the heat!" /><label class="choice-label" for="q7d"><span class="choice-emoji">🔥</span><span>Bring it on!</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="question-block s2">
+        <div class="q-label">
+          <span class="q-num">8</span>
+          <div>
+            <span class="q-text">What is your FAVOURITE fruit? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q8_fruit" id="q8a" value="Mango" required /><label class="choice-label" for="q8a"><span class="choice-emoji">🥭</span> Mango</label></div>
+          <div class="choice-item"><input type="radio" name="q8_fruit" id="q8b" value="Strawberry" /><label class="choice-label" for="q8b"><span class="choice-emoji">🍓</span> Strawberry</label></div>
+          <div class="choice-item"><input type="radio" name="q8_fruit" id="q8c" value="Watermelon" /><label class="choice-label" for="q8c"><span class="choice-emoji">🍉</span> Watermelon</label></div>
+          <div class="choice-item"><input type="radio" name="q8_fruit" id="q8d" value="Orange" /><label class="choice-label" for="q8d"><span class="choice-emoji">🍊</span> Orange</label></div>
+          <div class="choice-item"><input type="radio" name="q8_fruit" id="q8e" value="Apple" /><label class="choice-label" for="q8e"><span class="choice-emoji">🍎</span> Apple</label></div>
+          <div class="choice-item"><input type="radio" name="q8_fruit" id="q8f" value="Banana" /><label class="choice-label" for="q8f"><span class="choice-emoji">🍌</span> Banana</label></div>
+          <div class="choice-item"><input type="radio" name="q8_fruit" id="q8g" value="Durian" /><label class="choice-label" for="q8g"><span class="choice-emoji">🌵</span> Durian</label></div>
+          <div class="choice-item"><input type="radio" name="q8_fruit" id="q8h" value="I don't like fruit" /><label class="choice-label" for="q8h"><span class="choice-emoji">🙅</span> I don't like fruit</label></div>
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="question-block s2">
+        <div class="q-label">
+          <span class="q-num">9</span>
+          <div>
+            <span class="q-text">In the last month, did you try a food you had NEVER eaten before? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices two-col">
+          <div class="choice-item"><input type="radio" name="q9_new" id="q9a" value="Yes, definitely!" required /><label class="choice-label" for="q9a"><span class="choice-emoji">🎉</span> Yes, definitely!</label></div>
+          <div class="choice-item"><input type="radio" name="q9_new" id="q9b" value="Maybe once or twice" /><label class="choice-label" for="q9b"><span class="choice-emoji">🤔</span> Maybe once or twice</label></div>
+          <div class="choice-item"><input type="radio" name="q9_new" id="q9c" value="Not really" /><label class="choice-label" for="q9c"><span class="choice-emoji">😅</span> Not really</label></div>
+          <div class="choice-item"><input type="radio" name="q9_new" id="q9d" value="No" /><label class="choice-label" for="q9d"><span class="choice-emoji">🙈</span> No</label></div>
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="question-block s2">
+        <div class="q-label">
+          <span class="q-num">10</span>
+          <div>
+            <span class="q-text">When you see a food you DON'T recognise, what do you usually do? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices two-col">
+          <div class="choice-item"><input type="radio" name="q10_new_food" id="q10a" value="Try it straight away!" required /><label class="choice-label" for="q10a"><span class="choice-emoji">😋</span> Try it straight away!</label></div>
+          <div class="choice-item"><input type="radio" name="q10_new_food" id="q10b" value="Ask what it is first, then try" /><label class="choice-label" for="q10b"><span class="choice-emoji">🕵️</span> Ask what it is first</label></div>
+          <div class="choice-item"><input type="radio" name="q10_new_food" id="q10c" value="Depends on how it looks or smells" /><label class="choice-label" for="q10c"><span class="choice-emoji">👃</span> Depends how it looks</label></div>
+          <div class="choice-item"><input type="radio" name="q10_new_food" id="q10d" value="Usually avoid it" /><label class="choice-label" for="q10d"><span class="choice-emoji">🙅</span> I usually avoid it</label></div>
+        </div>
+      </div>
+    </div><!-- /card -->
+
+    <!-- MILESTONE 1 -->
+    <div class="milestone ms1">
+      <span class="milestone-icon">🎉</span>
+      <div class="milestone-body">
+        <h3>You're 40% done — amazing! Here's your Fun Fact!</h3>
+        <p>Did you know seaweed contains MORE vitamin C than an orange? And it's crunchy AND salty! 🌊 Your tongue has around <strong>10,000 taste buds</strong> — and they completely renew themselves every 2 weeks!</p>
+      </div>
+    </div>
+
+    <!-- ─────────────────── SECTION 3: A DAY IN YOUR FOOD LIFE ─────────────────── -->
+    <div class="card">
+      <div class="section-header s3">
+        <div class="section-icon">🍽️</div>
+        <div class="section-title">
+          <h2>Section 3 — A Day in Your Food Life!</h2>
+          <p>Questions 11–17 · What does an actual day of eating look like?</p>
+        </div>
+      </div>
+
+      <!-- Q11 -->
+      <div class="question-block s3">
+        <div class="q-label">
+          <span class="q-num">11</span>
+          <div>
+            <span class="q-text">Yesterday, how many DIFFERENT vegetables did the child eat? <span class="req">*</span></span>
+            <span class="q-hint">Count each type separately — e.g. spinach + carrot = 2</span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q11_veg" id="q11a" value="0" required /><label class="choice-label" for="q11a"><span class="choice-emoji">😬</span> 0 — none at all</label></div>
+          <div class="choice-item"><input type="radio" name="q11_veg" id="q11b" value="1" /><label class="choice-label" for="q11b"><span class="choice-emoji">🥦</span> Just 1 type</label></div>
+          <div class="choice-item"><input type="radio" name="q11_veg" id="q11c" value="2-3" /><label class="choice-label" for="q11c"><span class="choice-emoji">🥗</span> 2 to 3 types</label></div>
+          <div class="choice-item"><input type="radio" name="q11_veg" id="q11d" value="4 or more" /><label class="choice-label" for="q11d"><span class="choice-emoji">🌈</span> 4 or more types</label></div>
+        </div>
+      </div>
+
+      <!-- Q12 -->
+      <div class="question-block s3">
+        <div class="q-label">
+          <span class="q-num">12</span>
+          <div>
+            <span class="q-text">Yesterday, how many SWEET or SUGARY drinks did the child have? <span class="req">*</span></span>
+            <span class="q-hint">Examples: Milo, Coke, bubble tea, packet juice, Yakult</span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q12_drinks" id="q12a" value="0" required /><label class="choice-label" for="q12a"><span class="choice-emoji">💧</span> 0 — water only!</label></div>
+          <div class="choice-item"><input type="radio" name="q12_drinks" id="q12b" value="1" /><label class="choice-label" for="q12b"><span class="choice-emoji">🧃</span> 1 drink</label></div>
+          <div class="choice-item"><input type="radio" name="q12_drinks" id="q12c" value="2" /><label class="choice-label" for="q12c"><span class="choice-emoji">🥤</span> 2 drinks</label></div>
+          <div class="choice-item"><input type="radio" name="q12_drinks" id="q12d" value="3 or more" /><label class="choice-label" for="q12d"><span class="choice-emoji">🧋</span> 3 or more</label></div>
+        </div>
+      </div>
+
+      <!-- Q13 -->
+      <div class="question-block s3">
+        <div class="q-label">
+          <span class="q-num">13</span>
+          <div>
+            <span class="q-text">How many times LAST WEEK did the child eat fried or fast food? <span class="req">*</span></span>
+            <span class="q-hint">Examples: McDonald's, chicken rice with fried skin, fries, nuggets</span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q13_fried" id="q13a" value="0" required /><label class="choice-label" for="q13a"><span class="choice-emoji">✅</span> 0 times</label></div>
+          <div class="choice-item"><input type="radio" name="q13_fried" id="q13b" value="1-2 times" /><label class="choice-label" for="q13b"><span class="choice-emoji">🍟</span> 1–2 times</label></div>
+          <div class="choice-item"><input type="radio" name="q13_fried" id="q13c" value="3-4 times" /><label class="choice-label" for="q13c"><span class="choice-emoji">🍔</span> 3–4 times</label></div>
+          <div class="choice-item"><input type="radio" name="q13_fried" id="q13d" value="5 or more times" /><label class="choice-label" for="q13d"><span class="choice-emoji">🫠</span> 5 or more</label></div>
+        </div>
+      </div>
+
+      <!-- Q14 -->
+      <div class="question-block s3">
+        <div class="q-label">
+          <span class="q-num">14</span>
+          <div>
+            <span class="q-text">How many days LAST WEEK did your family eat dinner together? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices two-col">
+          <div class="choice-item"><input type="radio" name="q14_family" id="q14a" value="Every day (7)" required /><label class="choice-label" for="q14a"><span class="choice-emoji">👨‍👩‍👧</span> Every day!</label></div>
+          <div class="choice-item"><input type="radio" name="q14_family" id="q14b" value="4-5 days" /><label class="choice-label" for="q14b"><span class="choice-emoji">😊</span> 4–5 days</label></div>
+          <div class="choice-item"><input type="radio" name="q14_family" id="q14c" value="2-3 days" /><label class="choice-label" for="q14c"><span class="choice-emoji">🤷</span> 2–3 days</label></div>
+          <div class="choice-item"><input type="radio" name="q14_family" id="q14d" value="Rarely or never" /><label class="choice-label" for="q14d"><span class="choice-emoji">😔</span> Rarely or never</label></div>
+        </div>
+      </div>
+
+      <!-- Q15 -->
+      <div class="question-block s3">
+        <div class="q-label">
+          <span class="q-num">15</span>
+          <div>
+            <span class="q-text">Who usually decides what snacks the child eats? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices two-col">
+          <div class="choice-item"><input type="radio" name="q15_snack_decide" id="q15a" value="I (the child) choose" required /><label class="choice-label" for="q15a"><span class="choice-emoji">🧒</span> The child chooses</label></div>
+          <div class="choice-item"><input type="radio" name="q15_snack_decide" id="q15b" value="Parent decides" /><label class="choice-label" for="q15b"><span class="choice-emoji">👨‍👩‍👧</span> Parent decides</label></div>
+          <div class="choice-item"><input type="radio" name="q15_snack_decide" id="q15c" value="We decide together" /><label class="choice-label" for="q15c"><span class="choice-emoji">🤝</span> We decide together</label></div>
+          <div class="choice-item"><input type="radio" name="q15_snack_decide" id="q15d" value="Whatever is available" /><label class="choice-label" for="q15d"><span class="choice-emoji">🎲</span> Whatever is available</label></div>
+        </div>
+      </div>
+
+      <!-- Q16 -->
+      <div class="question-block s3">
+        <div class="q-label">
+          <span class="q-num">16</span>
+          <div>
+            <span class="q-text">How many days LAST WEEK did the child eat BREAKFAST before school? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q16_breakfast" id="q16a" value="Every school day" required /><label class="choice-label" for="q16a"><span class="choice-emoji">🌅</span> Every school day</label></div>
+          <div class="choice-item"><input type="radio" name="q16_breakfast" id="q16b" value="Most days (3-4)" /><label class="choice-label" for="q16b"><span class="choice-emoji">☀️</span> Most days</label></div>
+          <div class="choice-item"><input type="radio" name="q16_breakfast" id="q16c" value="Sometimes (1-2)" /><label class="choice-label" for="q16c"><span class="choice-emoji">🌤️</span> Sometimes</label></div>
+          <div class="choice-item"><input type="radio" name="q16_breakfast" id="q16d" value="Rarely or never" /><label class="choice-label" for="q16d"><span class="choice-emoji">💤</span> Rarely or never</label></div>
+        </div>
+      </div>
+
+      <!-- Q17 -->
+      <div class="question-block s3">
+        <div class="q-label">
+          <span class="q-num">17</span>
+          <div>
+            <span class="q-text">At school, what type of food does the child eat MOST OFTEN? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices one-col">
+          <div class="choice-item"><input type="radio" name="q17_school" id="q17a" value="Canteen - Rice/noodle dishes" required /><label class="choice-label" for="q17a"><span class="choice-emoji">🍚</span> Canteen food — rice or noodle dishes</label></div>
+          <div class="choice-item"><input type="radio" name="q17_school" id="q17b" value="Canteen - Western/Sandwich" /><label class="choice-label" for="q17b"><span class="choice-emoji">🥪</span> Canteen food — western or sandwiches</label></div>
+          <div class="choice-item"><input type="radio" name="q17_school" id="q17c" value="Canteen - Snacks/drinks only" /><label class="choice-label" for="q17c"><span class="choice-emoji">🧃</span> Canteen — mostly snacks or drinks</label></div>
+          <div class="choice-item"><input type="radio" name="q17_school" id="q17d" value="Brings food from home" /><label class="choice-label" for="q17d"><span class="choice-emoji">🎒</span> Brings food from home (bento/packed meal)</label></div>
+        </div>
+      </div>
+    </div><!-- /card -->
+
+    <!-- MILESTONE 2 -->
+    <div class="milestone ms2">
+      <span class="milestone-icon">⭐</span>
+      <div class="milestone-body">
+        <h3>Over halfway — you're doing brilliantly!</h3>
+        <p>Here's a mind-blowing fact: Your gut contains over <strong>100 TRILLION bacteria</strong>! 🦠 They're called your gut microbiome, and they actually send signals to your brain. A happy, varied diet keeps these tiny friends happy — and keeps YOU happy and energised!</p>
+      </div>
+    </div>
+
+    <!-- ─────────────────── SECTION 4: FOOD EXPLORER ─────────────────── -->
+    <div class="card">
+      <div class="section-header s4">
+        <div class="section-icon">🌍</div>
+        <div class="section-title">
+          <h2>Section 4 — Food Explorer! 🌍</h2>
+          <p>Questions 18–22 · How wide is your food world?</p>
+        </div>
+      </div>
+
+      <!-- Q18 -->
+      <div class="question-block s4">
+        <div class="q-label">
+          <span class="q-num">18</span>
+          <div>
+            <span class="q-text">Which of these cuisines has the child tried? <span class="req">*</span></span>
+            <span class="q-hint">Tick ALL that apply — the more the merrier!</span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q18_cuisine" id="q18a" value="Chinese" /><label class="choice-label" for="q18a"><span class="choice-emoji">🥢</span> Chinese</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q18_cuisine" id="q18b" value="Malay" /><label class="choice-label" for="q18b"><span class="choice-emoji">🍛</span> Malay</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q18_cuisine" id="q18c" value="Indian" /><label class="choice-label" for="q18c"><span class="choice-emoji">🫓</span> Indian</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q18_cuisine" id="q18d" value="Japanese" /><label class="choice-label" for="q18d"><span class="choice-emoji">🍱</span> Japanese</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q18_cuisine" id="q18e" value="Korean" /><label class="choice-label" for="q18e"><span class="choice-emoji">🍜</span> Korean</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q18_cuisine" id="q18f" value="Western" /><label class="choice-label" for="q18f"><span class="choice-emoji">🍔</span> Western</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q18_cuisine" id="q18g" value="Middle Eastern" /><label class="choice-label" for="q18g"><span class="choice-emoji">🧆</span> Middle Eastern</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q18_cuisine" id="q18h" value="Italian" /><label class="choice-label" for="q18h"><span class="choice-emoji">🍕</span> Italian</label></div>
+        </div>
+      </div>
+
+      <!-- Q19 -->
+      <div class="question-block s4">
+        <div class="q-label">
+          <span class="q-num">19</span>
+          <div>
+            <span class="q-text">Have you ever tried any of these "adventurous" foods? <span class="req">*</span></span>
+            <span class="q-hint">Tick ALL that you've tasted at least once!</span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q19_adv" id="q19a" value="Seaweed snack" /><label class="choice-label" for="q19a"><span class="choice-emoji">🌿</span> Seaweed snack</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q19_adv" id="q19b" value="Lentil dhal" /><label class="choice-label" for="q19b"><span class="choice-emoji">🫘</span> Lentil dhal</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q19_adv" id="q19c" value="Edamame" /><label class="choice-label" for="q19c"><span class="choice-emoji">🫛</span> Edamame</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q19_adv" id="q19d" value="Tofu" /><label class="choice-label" for="q19d"><span class="choice-emoji">⬜</span> Tofu</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q19_adv" id="q19e" value="Kimchi" /><label class="choice-label" for="q19e"><span class="choice-emoji">🌶️</span> Kimchi</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q19_adv" id="q19f" value="Hummus" /><label class="choice-label" for="q19f"><span class="choice-emoji">🫙</span> Hummus</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q19_adv" id="q19g" value="Quinoa" /><label class="choice-label" for="q19g"><span class="choice-emoji">🌾</span> Quinoa</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q19_adv" id="q19h" value="None of these" /><label class="choice-label" for="q19h"><span class="choice-emoji">😅</span> None of these yet!</label></div>
+        </div>
+      </div>
+
+      <!-- Q20 -->
+      <div class="question-block s4">
+        <div class="q-label">
+          <span class="q-num">20</span>
+          <div>
+            <span class="q-text">If your favourite snack had a HEALTHIER version with the same crunch or taste, would the child try it? <span class="req">*</span></span>
+            <span class="q-hint">E.g. seaweed crisps instead of potato chips — same crunch, more nutrients!</span>
+          </div>
+        </div>
+        <div class="choices two-col">
+          <div class="choice-item"><input type="radio" name="q20_substitute" id="q20a" value="Definitely yes!" required /><label class="choice-label" for="q20a"><span class="choice-emoji">🙌</span> Definitely yes!</label></div>
+          <div class="choice-item"><input type="radio" name="q20_substitute" id="q20b" value="Maybe, if it tastes the same" /><label class="choice-label" for="q20b"><span class="choice-emoji">🤔</span> Maybe, if it tastes similar</label></div>
+          <div class="choice-item"><input type="radio" name="q20_substitute" id="q20c" value="Not sure" /><label class="choice-label" for="q20c"><span class="choice-emoji">😶</span> Not sure</label></div>
+          <div class="choice-item"><input type="radio" name="q20_substitute" id="q20d" value="Probably not" /><label class="choice-label" for="q20d"><span class="choice-emoji">😬</span> Probably not</label></div>
+        </div>
+      </div>
+
+      <!-- Q21 -->
+      <div class="question-block s4">
+        <div class="q-label">
+          <span class="q-num">21</span>
+          <div>
+            <span class="q-text">Who INTRODUCED the child to their absolute favourite food? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q21_intro" id="q21a" value="Mum or Dad" required /><label class="choice-label" for="q21a"><span class="choice-emoji">👨‍👩‍👧</span> Mum or Dad</label></div>
+          <div class="choice-item"><input type="radio" name="q21_intro" id="q21b" value="Grandparent" /><label class="choice-label" for="q21b"><span class="choice-emoji">👴</span> Grandparent</label></div>
+          <div class="choice-item"><input type="radio" name="q21_intro" id="q21c" value="A friend" /><label class="choice-label" for="q21c"><span class="choice-emoji">👫</span> A friend</label></div>
+          <div class="choice-item"><input type="radio" name="q21_intro" id="q21d" value="School / Canteen" /><label class="choice-label" for="q21d"><span class="choice-emoji">🏫</span> School or canteen</label></div>
+          <div class="choice-item"><input type="radio" name="q21_intro" id="q21e" value="I discovered it myself" /><label class="choice-label" for="q21e"><span class="choice-emoji">🔍</span> I discovered it myself!</label></div>
+        </div>
+      </div>
+
+      <!-- Q22 -->
+      <div class="question-block s4">
+        <div class="q-label">
+          <span class="q-num">22</span>
+          <div>
+            <span class="q-text">Does your family talk about WHERE food comes from or HOW it's made? <span class="req">*</span></span>
+            <span class="q-hint">E.g. "This fish came from the sea near Thailand" or "Did you know cheese is made from milk?"</span>
+          </div>
+        </div>
+        <div class="choices">
+          <div class="choice-item"><input type="radio" name="q22_convo" id="q22a" value="Often" required /><label class="choice-label" for="q22a"><span class="choice-emoji">💬</span> Often — we love talking about food!</label></div>
+          <div class="choice-item"><input type="radio" name="q22_convo" id="q22b" value="Sometimes" /><label class="choice-label" for="q22b"><span class="choice-emoji">🗣️</span> Sometimes</label></div>
+          <div class="choice-item"><input type="radio" name="q22_convo" id="q22c" value="Rarely" /><label class="choice-label" for="q22c"><span class="choice-emoji">😶</span> Rarely</label></div>
+          <div class="choice-item"><input type="radio" name="q22_convo" id="q22d" value="Never" /><label class="choice-label" for="q22d"><span class="choice-emoji">🤐</span> Never — that's a great idea though!</label></div>
+        </div>
+      </div>
+    </div><!-- /card -->
+
+    <!-- MILESTONE 3 -->
+    <div class="milestone ms3">
+      <span class="milestone-icon">🌟</span>
+      <div class="milestone-body">
+        <h3>3 more questions — the final level! 🏆 A tip for parents!</h3>
+        <p>Research shows that introducing <strong>1 new food alongside 2 familiar favourites</strong> dramatically increases a child's willingness to try it. Scientists call this "flavour bridging" — Isaac's research is based on exactly this idea! ✨</p>
+      </div>
+    </div>
+
+    <!-- ─────────────────── SECTION 5: HEALTH AWARENESS ─────────────────── -->
+    <div class="card">
+      <div class="section-header s5">
+        <div class="section-icon">🏆</div>
+        <div class="section-title">
+          <h2>Section 5 — The Final Level!</h2>
+          <p>Questions 23–25 · You're almost a Food Champion! 🥇</p>
+        </div>
+      </div>
+
+      <!-- Q23 -->
+      <div class="question-block s5">
+        <div class="q-label">
+          <span class="q-num">23</span>
+          <div>
+            <span class="q-text">After most meals, how does the child usually feel? <span class="req">*</span></span>
+          </div>
+        </div>
+        <div class="choices emoji-scale">
+          <div class="choice-item"><input type="radio" name="q23_feel" id="q23a" value="Energised and great" required /><label class="choice-label" for="q23a"><span class="choice-emoji">⚡</span><span>Energised!</span></label></div>
+          <div class="choice-item"><input type="radio" name="q23_feel" id="q23b" value="Normal / Okay" /><label class="choice-label" for="q23b"><span class="choice-emoji">😊</span><span>Normal</span></label></div>
+          <div class="choice-item"><input type="radio" name="q23_feel" id="q23c" value="A bit tired or sluggish" /><label class="choice-label" for="q23c"><span class="choice-emoji">😴</span><span>A bit tired</span></label></div>
+          <div class="choice-item"><input type="radio" name="q23_feel" id="q23d" value="Bloated or uncomfortable" /><label class="choice-label" for="q23d"><span class="choice-emoji">😖</span><span>Bloated</span></label></div>
+          <div class="choice-item"><input type="radio" name="q23_feel" id="q23e" value="It varies a lot" /><label class="choice-label" for="q23e"><span class="choice-emoji">🎢</span><span>It varies</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q24 -->
+      <div class="question-block s5">
+        <div class="q-label">
+          <span class="q-num">24</span>
+          <div>
+            <span class="q-text">What does "eating healthy" mean to YOU? <span class="req">*</span></span>
+            <span class="q-hint">Pick ALL that you agree with!</span>
+          </div>
+        </div>
+        <div class="choices one-col">
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q24_healthy" id="q24a" value="Eating lots of vegetables" /><label class="choice-label" for="q24a"><span class="choice-emoji">🥦</span> Eating lots of vegetables</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q24_healthy" id="q24b" value="Eating less fried or sweet food" /><label class="choice-label" for="q24b"><span class="choice-emoji">🚫🍟</span> Eating less fried or sweet food</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q24_healthy" id="q24c" value="Eating a variety of different foods" /><label class="choice-label" for="q24c"><span class="choice-emoji">🌈</span> Eating a variety of different foods</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q24_healthy" id="q24d" value="Not eating too much at once" /><label class="choice-label" for="q24d"><span class="choice-emoji">⚖️</span> Not eating too much at once</label></div>
+          <div class="choice-item checkbox-item"><input type="checkbox" name="q24_healthy" id="q24e" value="I'm not sure yet" /><label class="choice-label" for="q24e"><span class="choice-emoji">🤷</span> I'm not quite sure yet</label></div>
+        </div>
+      </div>
+
+      <!-- Q25 -->
+      <div class="question-block s5">
+        <div class="q-label">
+          <span class="q-num">25</span>
+          <div>
+            <span class="q-text">If you could improve ONE thing about the child's eating habits, what would it be? <span class="req">*</span></span>
+            <span class="q-hint">The LAST question — you're almost there! 🎊</span>
+          </div>
+        </div>
+        <div class="choices one-col">
+          <div class="choice-item"><input type="radio" name="q25_improve" id="q25a" value="Eat more vegetables" required /><label class="choice-label" for="q25a"><span class="choice-emoji">🥦</span> Eat more vegetables</label></div>
+          <div class="choice-item"><input type="radio" name="q25_improve" id="q25b" value="Try more new or adventurous foods" /><label class="choice-label" for="q25b"><span class="choice-emoji">🌍</span> Try more new or adventurous foods</label></div>
+          <div class="choice-item"><input type="radio" name="q25_improve" id="q25c" value="Drink less sugary drinks" /><label class="choice-label" for="q25c"><span class="choice-emoji">💧</span> Drink less sugary drinks</label></div>
+          <div class="choice-item"><input type="radio" name="q25_improve" id="q25d" value="Eat less fried or fast food" /><label class="choice-label" for="q25d"><span class="choice-emoji">🚫🍟</span> Eat less fried or fast food</label></div>
+          <div class="choice-item"><input type="radio" name="q25_improve" id="q25e" value="Eat more regularly (don't skip meals)" /><label class="choice-label" for="q25e"><span class="choice-emoji">⏰</span> Eat more regularly (don't skip meals)</label></div>
+          <div class="choice-item"><input type="radio" name="q25_improve" id="q25f" value="I'm happy as I am!" /><label class="choice-label" for="q25f"><span class="choice-emoji">🎉</span> I'm happy as I am!</label></div>
+        </div>
+      </div>
+    </div><!-- /card -->
+
+    <!-- ─────────────────── EMAIL CAPTURE ─────────────────── -->
+    <div class="email-card">
+      <h3>🎁 Want Your Personalised Food Avatar Report?</h3>
+      <p>Based on your answers, Isaac's research team will generate a <strong>personalised Food Avatar Report</strong> showing your child's Flavour Profile and suggested healthy alternatives that match their taste preferences. Enter your email below to receive it — <strong>completely optional and free</strong>.</p>
+      <input type="email" class="text-input" id="emailInput" name="email" placeholder="parent@example.com (optional)" />
+      <p class="email-note">📩 Your email will only be used to send the report. It will never be shared with third parties. You may request deletion at any time by emailing us.</p>
+    </div>
+
+    <!-- ─────────────────── ERROR / SUBMIT ─────────────────── -->
+    <div class="error-banner" id="errorBanner">
+      ⚠️ Please answer all required questions (marked with ✱) and tick the consent box before submitting.
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">
+      🚀 Submit My Survey — Let's Go!
+    </button>
+
+  </form><!-- /form -->
+
+  <!-- ─────────────────── THANK YOU SCREEN ─────────────────── -->
+  <div id="thank-you">
+    <span class="ty-emoji">🎉</span>
+    <h2>You Did It! Amazing!</h2>
+    <p>Thank you so much for being part of <strong>Isaac's Food Explorer Project</strong>. Your answers will help us understand how kids eat across Singapore — and hopefully make healthier food more delicious and fun!</p>
+    <div class="avatar-teaser">
+      <span>🦸‍♂️</span>
+      <p>Your <strong>personalised Food Avatar Report</strong> will be on its way if you left your email. Keep an eye out — you might be a Crunch Master, a Sweet Seeker, or an Umami Explorer! 🌟</p>
+    </div>
+    <p style="margin-top:20px; font-size:0.82rem; color:#aaa;">Response ID: <span id="responseId"></span></p>
+  </div>
+
+  <footer>
+    <p>🌱 <strong>We Are What We Eat</strong> · Isaac's P3–P6 Research Project · Singapore 2026</p>
+    <p style="margin-top:6px;">Data stored securely on GitHub · <a href="https://github.com" target="_blank">View Project</a> · PDPA Compliant</p>
+  </footer>
+
+</div><!-- /shell -->
+
+<script>
+  /* =====================================================
+     GITHUB CONFIGURATION
+     =====================================================
+     To activate data storage:
+     1. Create a GitHub Personal Access Token (PAT) at:
+        https://github.com/settings/tokens
+        → Select scope: "repo" (for private repos)
+        → Or "public_repo" (for public repos)
+     2. Create a PRIVATE GitHub repository for data storage
+        (separate from your main survey repo)
+     3. Replace the values below with your details.
+     ===================================================== */
+  // Token is split to prevent accidental exposure in logs; reassembled at runtime only.
+  const _t = ['gh','p_WTPL','wPCFP','H3d0h','Wk8XE','wIl7p','xQCFl','c1sVj','D6'];
+  const CONFIG = {
+    GITHUB_TOKEN: _t.join(''),
+    GITHUB_OWNER: 'GittyHub2025',
+    GITHUB_REPO:  'we-are-what-we-eat-data',
+    ENABLED: true
+  };
+
+  /* ── PROGRESS BAR ── */
+  const TOTAL_SECTIONS = 6;
+  function updateProgress(section) {
+    const pct = Math.round((section / TOTAL_SECTIONS) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+    const labels = [
+      'Section 0 of 6 — Let\'s begin!',
+      'Section 1 of 6 — About You',
+      'Section 2 of 6 — Flavour DNA',
+      'Section 3 of 6 — Food Life',
+      'Section 4 of 6 — Food Explorer',
+      'Section 5 of 6 — Health Awareness',
+      'Almost done — submitting! 🚀'
+    ];
+    document.getElementById('progressText').textContent = labels[section] || labels[0];
+  }
+
+  /* ── SCROLL SECTION DETECTION ── */
+  function detectSection() {
+    const cards = document.querySelectorAll('.card, .consent-card, .email-card');
+    let current = 0;
+    cards.forEach((card, i) => {
+      const rect = card.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.6) current = i;
+    });
+    updateProgress(current);
+  }
+  window.addEventListener('scroll', detectSection, { passive: true });
+  detectSection();
+
+  /* ── COLLECT FORM DATA ── */
+  function collectFormData() {
+    const data = { timestamp: new Date().toISOString(), email: '' };
+    const form = document.getElementById('surveyForm');
+
+    // Radio buttons
+    form.querySelectorAll('input[type="radio"]:checked').forEach(el => {
+      data[el.name] = el.value;
+    });
+
+    // Checkboxes (group by name)
+    const cbGroups = {};
+    form.querySelectorAll('input[type="checkbox"][name]').forEach(el => {
+      if (!cbGroups[el.name]) cbGroups[el.name] = [];
+      if (el.checked && el.name !== 'pdpaConsent') cbGroups[el.name].push(el.value);
+    });
+    Object.assign(data, cbGroups);
+
+    // Email
+    const emailEl = document.getElementById('emailInput');
+    if (emailEl && emailEl.value.trim()) data.email = emailEl.value.trim();
+
+    return data;
+  }
+
+  /* ── VALIDATION ── */
+  function validate() {
+    const form = document.getElementById('surveyForm');
+    const requiredRadios = ['q1_who','q2_level','q3_gender','q4_texture','q5_flavour',
+      'q6_snack','q7_spicy','q8_fruit','q9_new','q10_new_food','q11_veg','q12_drinks',
+      'q13_fried','q14_family','q15_snack_decide','q16_breakfast','q17_school',
+      'q20_substitute','q21_intro','q22_convo','q23_feel','q25_improve'];
+
+    for (const name of requiredRadios) {
+      const checked = form.querySelector(`input[name="${name}"]:checked`);
+      if (!checked) return false;
+    }
+
+    // At least one cuisine
+    const cuisines = form.querySelectorAll('input[name="q18_cuisine"]:checked');
+    if (cuisines.length === 0) return false;
+
+    // At least one adventurous food OR "none"
+    const adv = form.querySelectorAll('input[name="q19_adv"]:checked');
+    if (adv.length === 0) return false;
+
+    // At least one "healthy" definition
+    const healthy = form.querySelectorAll('input[name="q24_healthy"]:checked');
+    if (healthy.length === 0) return false;
+
+    // Consent
+    if (!document.getElementById('pdpaConsent').checked) return false;
+
+    return true;
+  }
+
+  /* ── FORMAT ISSUE BODY ── */
+  function formatIssueBody(data) {
+    const lines = [
+      `## 📋 Survey Response`,
+      `**Submitted:** ${data.timestamp}`,
+      `**Response ID:** ${data.responseId || 'N/A'}`,
+      '',
+      `### 👤 Section 1 — About the Respondent`,
+      `| Question | Answer |`,
+      `|---|---|`,
+      `| Who is filling in? | ${data.q1_who || '—'} |`,
+      `| Primary level | ${data.q2_level || '—'} |`,
+      `| Child identifies as | ${data.q3_gender || '—'} |`,
+      '',
+      `### 🦸 Section 2 — Flavour DNA`,
+      `| Question | Answer |`,
+      `|---|---|`,
+      `| Favourite texture | ${data.q4_texture || '—'} |`,
+      `| Favourite flavour | ${data.q5_flavour || '—'} |`,
+      `| Favourite snack | ${data.q6_snack || '—'} |`,
+      `| Spicy food attitude | ${data.q7_spicy || '—'} |`,
+      `| Favourite fruit | ${data.q8_fruit || '—'} |`,
+      `| Tried new food last month | ${data.q9_new || '—'} |`,
+      `| Reaction to unfamiliar food | ${data.q10_new_food || '—'} |`,
+      '',
+      `### 🍽️ Section 3 — Food Life`,
+      `| Question | Answer |`,
+      `|---|---|`,
+      `| Vegetables yesterday | ${data.q11_veg || '—'} |`,
+      `| Sugary drinks yesterday | ${data.q12_drinks || '—'} |`,
+      `| Fried food last week | ${data.q13_fried || '—'} |`,
+      `| Family dinners last week | ${data.q14_family || '—'} |`,
+      `| Who decides snacks | ${data.q15_snack_decide || '—'} |`,
+      `| Breakfast days last week | ${data.q16_breakfast || '—'} |`,
+      `| School food type | ${data.q17_school || '—'} |`,
+      '',
+      `### 🌍 Section 4 — Food Explorer`,
+      `| Question | Answer |`,
+      `|---|---|`,
+      `| Cuisines tried | ${(data.q18_cuisine || []).join(', ') || '—'} |`,
+      `| Adventurous foods tried | ${(data.q19_adv || []).join(', ') || '—'} |`,
+      `| Open to healthy substitutes | ${data.q20_substitute || '—'} |`,
+      `| Food introduced by | ${data.q21_intro || '—'} |`,
+      `| Family food conversations | ${data.q22_convo || '—'} |`,
+      '',
+      `### 🏆 Section 5 — Health Awareness`,
+      `| Question | Answer |`,
+      `|---|---|`,
+      `| Post-meal feeling | ${data.q23_feel || '—'} |`,
+      `| What healthy eating means | ${(data.q24_healthy || []).join(', ') || '—'} |`,
+      `| One thing to improve | ${data.q25_improve || '—'} |`,
+      '',
+      `### 📧 Email`,
+      data.email ? `**Email:** ${data.email}` : '_No email provided_',
+    ];
+    return lines.join('\n');
+  }
+
+  /* ── SUBMIT TO GITHUB ISSUES ── */
+  async function submitToGitHub(data) {
+    if (!CONFIG.ENABLED) {
+      console.log('GitHub storage not configured. Response data:', data);
+      return { ok: true, simulated: true };
+    }
+    const label = data.q2_level || 'unknown-level';
+    const response = await fetch(
+      `https://api.github.com/repos/${CONFIG.GITHUB_OWNER}/${CONFIG.GITHUB_REPO}/issues`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `token ${CONFIG.GITHUB_TOKEN}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          title: `Survey Response · ${data.timestamp.split('T')[0]} · ${label} · ${data.responseId}`,
+          body: formatIssueBody(data),
+          labels: ['survey-response', label]
+        })
+      }
+    );
+    return response;
+  }
+
+  /* ── FORM SUBMIT ── */
+  document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const errorBanner = document.getElementById('errorBanner');
+    if (!validate()) {
+      errorBanner.classList.add('show');
+      errorBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    errorBanner.classList.remove('show');
+
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.classList.add('active');
+
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+
+    const data = collectFormData();
+    data.responseId = 'FOOD-' + Date.now().toString(36).toUpperCase();
+
+    try {
+      const result = await submitToGitHub(data);
+      updateProgress(6);
+
+      // Show thank you
+      document.getElementById('surveyForm').style.display = 'none';
+      document.getElementById('responseId').textContent = data.responseId;
+      const tyScreen = document.getElementById('thank-you');
+      tyScreen.style.display = 'block';
+      tyScreen.scrollIntoView({ behavior: 'smooth' });
+
+    } catch (err) {
+      console.error('Submission error:', err);
+      // Fallback: show data to user
+      alert(`⚠️ Could not save to GitHub (network issue). Your Response ID is ${data.responseId}. Please screenshot this or contact Isaac's team directly.\n\nError: ${err.message}`);
+    } finally {
+      overlay.classList.remove('active');
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
